@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLIK Merchant Dashboard - UX Gap Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --critical: #dc2626;
+            --high: #ea580c;
+            --medium: #eab308;
+            --low: #0891b2;
+            --success: #16a34a;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --bg-light: #f9fafb;
+            --bg-white: #ffffff;
+            --border: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--bg-light);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background: var(--bg-white);
+            padding: 3rem 2rem;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        header .subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        header .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-card.critical { border-left-color: var(--critical); }
+        .stat-card.high { border-left-color: var(--high); }
+        .stat-card.medium { border-left-color: var(--medium); }
+        .stat-card.low { border-left-color: var(--low); }
+
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        .stat-card .label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            background: var(--bg-white);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-tabs button {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--border);
+            background: var(--bg-white);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-tabs button:hover {
+            border-color: var(--primary);
+            background: var(--bg-light);
+        }
+
+        .nav-tabs button.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .priority-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .priority-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .priority-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .priority-badge.critical { background: var(--critical); }
+        .priority-badge.high { background: var(--high); }
+        .priority-badge.medium { background: var(--medium); }
+        .priority-badge.low { background: var(--low); }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+        }
+
+        .section-header .badge-text {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .issues-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .issue-card {
+            background: var(--bg-white);
+            border: 2px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .issue-card:hover {
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+            transform: translateY(-4px);
+        }
+
+        .issue-card.expanded {
+            grid-column: 1 / -1;
+        }
+
+        .issue-card.expanded .issue-details {
+            display: block;
+        }
+
+        .issue-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .issue-number {
+            background: var(--bg-light);
+            border-radius: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            font-weight: bold;
+            color: var(--text-light);
+            white-space: nowrap;
+        }
+
+        .issue-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .issue-impact {
+            display: inline-block;
+            background: #fef08a;
+            color: #92400e;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin: 0.5rem 0;
+        }
+
+        .issue-description {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin: 1rem 0;
+            line-height: 1.5;
+        }
+
+        .issue-details {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .issue-details h4 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .issue-details ul,
+        .issue-details ol {
+            margin-left: 1.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .issue-details li {
+            margin-bottom: 0.4rem;
+        }
+
+        .issue-action {
+            background: #dbeafe;
+            color: #0c4a6e;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        .expand-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--primary);
+            font-size: 1.2rem;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .expand-btn::before {
+            content: '▼';
+            font-size: 0.75rem;
+            transition: transform 0.3s ease;
+        }
+
+        .issue-card.expanded .expand-btn::before {
+            transform: rotate(180deg);
+        }
+
+        .modules-summary {
+            margin: 3rem 0;
+            background: var(--bg-white);
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow);
+        }
+
+        .modules-summary h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: var(--bg-light);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border);
+            color: var(--text-dark);
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:hover {
+            background: var(--bg-light);
+        }
+
+        .action-plan {
+            margin: 3rem 0;
+            background: var(--bg-white);
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow);
+        }
+
+        .action-plan h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .phase {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .phase:last-child {
+            border-bottom: none;
+        }
+
+        .phase h4 {
+            background: var(--bg-light);
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            font-size: 1.05rem;
+        }
+
+        .phase ol {
+            margin-left: 2rem;
+            color: var(--text-light);
+        }
+
+        .phase li {
+            margin-bottom: 0.75rem;
+        }
+
+        footer {
+            background: var(--bg-white);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-light);
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-box h3 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .summary-box p {
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header {
+                padding: 1.5rem;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .issues-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .nav-tabs button {
+                width: 100%;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+
+        .filter-box {
+            background: var(--bg-white);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .filter-box h3 {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border);
+            background: var(--bg-white);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            background: var(--bg-light);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .expand-all-btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .expand-all-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        .print-note {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #0369a1;
+        }
+
+        @media print {
+            .nav-tabs, .expand-all-btn, .filter-box {
+                display: none;
+            }
+
+            .issue-card {
+                page-break-inside: avoid;
+            }
+
+            body {
+                background: white;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 FLIK Merchant Dashboard</h1>
+            <p class="subtitle">Prioritized UX Gap Report & Implementation Roadmap</p>
+            
+            <div class="print-note">
+                📋 <strong>Note:</strong> You can print or save this report as PDF from your browser (Cmd+P / Ctrl+P)
+            </div>
+
+            <div class="stats">
+                <div class="stat-card critical">
+                    <div class="number">10</div>
+                    <div class="label">🔴 Critical</div>
+                </div>
+                <div class="stat-card high">
+                    <div class="number">19</div>
+                    <div class="label">🟠 High</div>
+                </div>
+                <div class="stat-card medium">
+                    <div class="number">44</div>
+                    <div class="label">🟡 Medium</div>
+                </div>
+                <div class="stat-card low">
+                    <div class="number">10</div>
+                    <div class="label">🔵 Low</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="summary-box">
+            <h3>📊 Executive Summary</h3>
+            <p>This comprehensive UX gap report identifies <strong>73 critical issues</strong> across all 10 modules of the FLIK Merchant Dashboard. Key findings reveal consistency issues with visual states, missing interaction documentation, accessibility gaps, and responsive design concerns.</p>
+            <p><strong>Recommendation:</strong> Start with the 10 Critical Priority items to establish your design system foundation, then progressively address High and Medium priority items.</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" data-priority="critical">🔴 Critical (10)</button>
+            <button class="tab-btn" data-priority="high">🟠 High (19)</button>
+            <button class="tab-btn" data-priority="medium">🟡 Medium (44)</button>
+            <button class="tab-btn" data-priority="low">🔵 Low (10)</button>
+            <button class="tab-btn" data-priority="summary">📊 Summary & Plan</button>
+        </div>
+
+        <!-- CRITICAL PRIORITY -->
+        <div class="priority-section active" id="critical-section">
+            <div class="section-header">
+                <div class="priority-badge critical">🔴</div>
+                <div>
+                    <h2>Critical Priority Issues</h2>
+                    <p class="badge-text">Immediate Action Required - Foundation Problems Affecting All Modules</p>
+                </div>
+            </div>
+
+            <button class="expand-all-btn" onclick="toggleAllCards('critical-section')">Expand All Details</button>
+
+            <div class="issues-grid" id="critical-grid">
+                <!-- Issues will be inserted by JavaScript -->
+            </div>
+        </div>
+
+        <!-- HIGH PRIORITY -->
+        <div class="priority-section" id="high-section">
+            <div class="section-header">
+                <div class="priority-badge high">🟠</div>
+                <div>
+                    <h2>High Priority Issues</h2>
+                    <p class="badge-text">Should Complete This Sprint</p>
+                </div>
+            </div>
+
+            <button class="expand-all-btn" onclick="toggleAllCards('high-section')">Expand All Details</button>
+
+            <div class="issues-grid" id="high-grid">
+                <!-- Issues will be inserted by JavaScript -->
+            </div>
+        </div>
+
+        <!-- MEDIUM PRIORITY -->
+        <div class="priority-section" id="medium-section">
+            <div class="section-header">
+                <div class="priority-badge medium">🟡</div>
+                <div>
+                    <h2>Medium Priority Issues</h2>
+                    <p class="badge-text">Complete Next Sprint</p>
+                </div>
+            </div>
+
+            <button class="expand-all-btn" onclick="toggleAllCards('medium-section')">Expand All Details</button>
+
+            <div class="issues-grid" id="medium-grid">
+                <!-- Issues will be inserted by JavaScript -->
+            </div>
+        </div>
+
+        <!-- LOW PRIORITY -->
+        <div class="priority-section" id="low-section">
+            <div class="section-header">
+                <div class="priority-badge low">🔵</div>
+                <div>
+                    <h2>Low Priority Issues</h2>
+                    <p class="badge-text">Nice to Have</p>
+                </div>
+            </div>
+
+            <button class="expand-all-btn" onclick="toggleAllCards('low-section')">Expand All Details</button>
+
+            <div class="issues-grid" id="low-grid">
+                <!-- Issues will be inserted by JavaScript -->
+            </div>
+        </div>
+
+        <!-- SUMMARY & ACTION PLAN -->
+        <div class="priority-section" id="summary-section">
+            <div class="modules-summary">
+                <h3>📈 Summary by Module</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th style="text-align: center;">🔴 Critical</th>
+                                <th style="text-align: center;">🟠 High</th>
+                                <th style="text-align: center;">🟡 Medium</th>
+                                <th style="text-align: center;">🔵 Low</th>
+                                <th style="text-align: center;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Authentication</strong></td>
+                                <td style="text-align: center;">8</td>
+                                <td style="text-align: center;">3</td>
+                                <td style="text-align: center;">2</td>
+                                <td style="text-align: center;">2</td>
+                                <td style="text-align: center;"><strong>15</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dashboard & Settings</strong></td>
+                                <td style="text-align: center;">10</td>
+                                <td style="text-align: center;">4</td>
+                                <td style="text-align: center;">2</td>
+                                <td style="text-align: center;">3</td>
+                                <td style="text-align: center;"><strong>19</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Profile Management</strong></td>
+                                <td style="text-align: center;">10</td>
+                                <td style="text-align: center;">3</td>
+                                <td style="text-align: center;">2</td>
+                                <td style="text-align: center;">1</td>
+                                <td style="text-align: center;"><strong>16</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>General Settings</strong></td>
+                                <td style="text-align: center;">10</td>
+                                <td style="text-align: center;">4</td>
+                                <td style="text-align: center;">1</td>
+                                <td style="text-align: center;">2</td>
+                                <td style="text-align: center;"><strong>17</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Saldo</strong></td>
+                                <td style="text-align: center;">10</td>
+                                <td style="text-align: center;">5</td>
+                                <td style="text-align: center;">1</td>
+                                <td style="text-align: center;">1</td>
+                                <td style="text-align: center;"><strong>17</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>FLIK Checkout</strong></td>
+                                <td style="text-align: center;">10</td>
+                                <td style="text-align: center;">6</td>
+                                <td style="text-align: center;">3</td>
+                                <td style="text-align: center;">2</td>
+                                <td style="text-align: center;"><strong>21</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>FLIK Shipping</strong></td>
+                                <td style="text-align: center;">10</td>
+                                <td style="text-align: center;">6</td>
+                                <td style="text-align: center;">4</td>
+                                <td style="text-align: center;">2</td>
+                                <td style="text-align: center;"><strong>22</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Pendanaan (MCA)</strong></td>
+                                <td style="text-align: center;">10</td>
+                                <td style="text-align: center;">4</td>
+                                <td style="text-align: center;">2</td>
+                                <td style="text-align: center;">1</td>
+                                <td style="text-align: center;"><strong>17</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Marketing</strong></td>
+                                <td style="text-align: center;">10</td>
+                                <td style="text-align: center;">5</td>
+                                <td style="text-align: center;">3</td>
+                                <td style="text-align: center;">1</td>
+                                <td style="text-align: center;"><strong>19</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Promotions</strong></td>
+                                <td style="text-align: center;">10</td>
+                                <td style="text-align: center;">5</td>
+                                <td style="text-align: center;">3</td>
+                                <td style="text-align: center;">1</td>
+                                <td style="text-align: center;"><strong>19</strong></td>
+                            </tr>
+                            <tr style="background: var(--bg-light); font-weight: bold;">
+                                <td><strong>TOTAL</strong></td>
+                                <td style="text-align: center; color: var(--critical);">73</td>
+                                <td style="text-align: center;">—</td>
+                                <td style="text-align: center;">—</td>
+                                <td style="text-align: center;">—</td>
+                                <td style="text-align: center;"><strong>All Modules</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="action-plan">
+                <h3>🚀 Recommended 8-Week Implementation Plan</h3>
+
+                <div class="phase">
+                    <h4>Phase 1: Weeks 1-2 - Critical Foundation</h4>
+                    <ol>
+                        <li>Create design system documentation (colors, typography, spacing)</li>
+                        <li>Define component library (buttons, forms, modals, tables)</li>
+                        <li>Create state specifications (loading, error, empty, success)</li>
+                        <li>Document responsive breakpoints and mobile layouts</li>
+                        <li>Add accessibility standards (ARIA, keyboard nav, focus states)</li>
+                    </ol>
+                </div>
+
+                <div class="phase">
+                    <h4>Phase 2: Weeks 3-4 - High Priority Components</h4>
+                    <ol>
+                        <li>Create detailed component specifications for all form controls</li>
+                        <li>Document confirmation dialogs and error recovery flows</li>
+                        <li>Design multi-step form pattern and documentation</li>
+                        <li>Create notification/toast system design</li>
+                        <li>Document all interaction patterns and micro-interactions</li>
+                    </ol>
+                </div>
+
+                <div class="phase">
+                    <h4>Phase 3: Weeks 5-6 - Module-Specific Documentation</h4>
+                    <ol>
+                        <li>Create detailed UI specs for each module (Invoice, Shipping, etc.)</li>
+                        <li>Add missing visualizations (charts, timelines, kanban boards)</li>
+                        <li>Document all list/table patterns</li>
+                        <li>Add contextual help and guidance patterns</li>
+                    </ol>
+                </div>
+
+                <div class="phase">
+                    <h4>Phase 4: Weeks 7-8 - Polish & Refinement</h4>
+                    <ol>
+                        <li>Complete remaining low-priority items</li>
+                        <li>Add animation specifications</li>
+                        <li>Create comprehensive design system documentation</li>
+                        <li>User testing and refinement</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Generated: April 24, 2026 | FLIK Merchant Dashboard UX Gap Report v1.0</p>
+            <p>For updates and questions, refer to the FLIK documentation repository</p>
+        </footer>
+    </div>
+
+    <script>
+        // Issue data
+        const issues = {
+            critical: [
+                {
+                    num: 1,
+                    title: "Missing Visual State Documentation Across All Modules",
+                    modules: "All (10/10 modules)",
+                    issue: "No documentation for critical states (loading, empty, error, success)",
+                    impact: "Inconsistent UI implementation across products",
+                    examples: [
+                        "No loading spinners/skeletons defined for async operations",
+                        "Empty states not documented for new users",
+                        "Error messages styling undefined",
+                        "Success confirmations not visually specified"
+                    ],
+                    action: "Create state design system covering: Idle, Loading, Success, Error, Empty, Disabled"
+                },
+                {
+                    num: 2,
+                    title: "Missing Form Validation & Error Handling UI",
+                    modules: "Authentication, Profile, Settings, Checkout, Shipping, Promotions",
+                    issue: "Form validation feedback not visually documented",
+                    impact: "Users unclear if fields are valid, required, or have errors",
+                    examples: [
+                        "Required field indicators not specified",
+                        "Inline error message styling missing",
+                        "Success validation checkmarks not documented",
+                        "Real-time validation visual feedback missing"
+                    ],
+                    action: "Document validation states and inline feedback UI"
+                },
+                {
+                    num: 3,
+                    title: "Undefined Multi-Step Form Progression",
+                    modules: "Checkout (Invoice), Shipping (6-step creation), MCA (9-step)",
+                    issue: "Step indicators, progress bars, navigation not visually documented",
+                    impact: "Users unclear on progress, can't navigate backwards, step 1/3 styling undefined",
+                    examples: [
+                        "Pengiriman 6-step form: step completion colors not specified",
+                        "MCA 9-step: progress visualization missing",
+                        "Back navigation not mentioned",
+                        "Step skipping capability unclear"
+                    ],
+                    action: "Create comprehensive multi-step form design system"
+                },
+                {
+                    num: 4,
+                    title: "Missing Modal/Dialog Standardization",
+                    modules: "Saldo, Checkout, Shipping, All pop-ups",
+                    issue: "Pop-ups documented but not visually specified",
+                    impact: "Inconsistent modal appearance, unclear behavior",
+                    examples: [
+                        "Modal size/position not documented",
+                        "Close button (X) behavior unclear (click outside to close?)",
+                        "Overlay opacity/color not specified",
+                        "Modal titles and padding not standardized"
+                    ],
+                    action: "Create modal component design specification"
+                },
+                {
+                    num: 5,
+                    title: "Responsive Design Gap - No Mobile/Tablet Layouts",
+                    modules: "All (10/10 modules)",
+                    issue: "Zero documentation for mobile/tablet versions",
+                    impact: "Responsive implementation guesswork, inconsistent mobile UX",
+                    examples: [
+                        "Multi-column tables: no horizontal scroll specified",
+                        "Hamburger menu never documented",
+                        "Dropdown behavior on mobile unclear",
+                        "Touch targets sizing not addressed"
+                    ],
+                    action: "Create responsive breakpoint specifications (Mobile: <768px, Tablet: 768-1024px, Desktop: >1024px)"
+                },
+                {
+                    num: 6,
+                    title: "Color Scheme Not Defined - Especially Status Colors",
+                    modules: "All (10/10 modules)",
+                    issue: "Status colors, warning colors, success colors undefined",
+                    impact: "Inconsistent color usage across modules",
+                    examples: [
+                        "Invoice status (Paid, Draft, Overdue) colors not specified",
+                        "Shipment status (In Transit, Delivered, Failed) colors not specified",
+                        "Red Zone colors not documented (#FF0000, #00FF00, #FFFF00 implied)",
+                        "Error, warning, success colors not in design system"
+                    ],
+                    action: "Create comprehensive color palette documentation with status colors"
+                },
+                {
+                    num: 7,
+                    title: "Missing Accessibility Standards (WCAG 2.1)",
+                    modules: "All (10/10 modules)",
+                    issue: "ARIA labels, semantic HTML, focus management not documented",
+                    impact: "Non-compliant with accessibility standards, screen reader unusable",
+                    examples: [
+                        "Form labels not associated with inputs (aria-label)",
+                        "Status badges only color-coded (no text alternative)",
+                        "Required fields not marked (aria-required)",
+                        "Focus states not documented",
+                        "Tab order not specified"
+                    ],
+                    action: "Add accessibility section to all components"
+                },
+                {
+                    num: 8,
+                    title: "Language Inconsistency - Indonesian vs. English Mix",
+                    modules: "All (10/10 modules)",
+                    issue: "Mixed Indonesian and English terminology",
+                    impact: "Confusing user experience, unclear labels",
+                    examples: [
+                        "\"Daftar\" vs \"Register\"",
+                        "\"Beli Kredit\" vs \"Purchase Credits\"",
+                        "\"Pengiriman\" vs \"Shipping\"",
+                        "\"Toko Offline\" vs \"Point of Sale\""
+                    ],
+                    action: "Establish language/terminology standard (or intentional bilingual design)"
+                },
+                {
+                    num: 9,
+                    title: "No Focus States & Keyboard Navigation",
+                    modules: "All interactive components",
+                    issue: "Focus states not documented, keyboard navigation missing",
+                    impact: "Keyboard users and developers unclear how focused elements should appear",
+                    examples: [
+                        "Button focus outline not specified",
+                        "Form field focus border color not documented",
+                        "Tab navigation order not mentioned",
+                        "Keyboard shortcuts not available"
+                    ],
+                    action: "Document focus state design for all interactive elements"
+                },
+                {
+                    num: 10,
+                    title: "Missing Button/CTA Standardization",
+                    modules: "All (10/10 modules)",
+                    issue: "Button styling inconsistent across documentation",
+                    impact: "Unclear which actions are primary, secondary, destructive",
+                    examples: [
+                        "\"Simpan\" vs \"Kirim\" button colors not specified",
+                        "Destructive actions (Delete, Cancel) button styling undefined",
+                        "Button sizes not specified (small, medium, large)",
+                        "Button states (hover, active, disabled) missing"
+                    ],
+                    action: "Create button component library with all states"
+                }
+            ],
+            high: [
+                {
+                    num: 11,
+                    title: "Missing Data Loading States",
+                    modules: "Saldo, Analytics, Reports, Checkout",
+                    issue: "No skeleton loaders, spinners, or loading states documented",
+                    impact: "UI jumps, unclear data fetching status",
+                    examples: [],
+                    action: "Document loading states and skeleton UI"
+                },
+                {
+                    num: 12,
+                    title: "Undefined Empty States",
+                    modules: "Customer Management, Leads, Voucher, Shipment list",
+                    issue: "New user empty states not visually shown",
+                    impact: "Confusing experience for new users, missing guidance",
+                    examples: [],
+                    action: "Document empty state illustrations and CTAs for each module"
+                },
+                {
+                    num: 13,
+                    title: "Missing Interaction Patterns & Animations",
+                    modules: "All transition-heavy modules",
+                    issue: "Dropdown animations, transitions, hover states not documented",
+                    impact: "Unclear if interaction should have animation/feedback",
+                    examples: [
+                        "Dropdown menu fade-in duration not specified",
+                        "Form field expansion animation missing",
+                        "Status change transition not documented"
+                    ],
+                    action: "Document all micro-interactions"
+                },
+                {
+                    num: 14,
+                    title: "No Confirmation Dialogs for Destructive Actions",
+                    modules: "Profile (Delete), Shipping (Cancel), Promotions (Delete)",
+                    issue: "Delete/Cancel actions lack confirmation workflows",
+                    impact: "Risk of accidental destructive actions",
+                    examples: [],
+                    action: "Document confirmation modal workflow for all destructive actions"
+                },
+                {
+                    num: 15,
+                    title: "Missing Dropdown & Select Component Spec",
+                    modules: "Order Form Builder, Checkout, Shipping (Carrier selection)",
+                    issue: "Dropdown styling, option formatting, search not documented",
+                    impact: "Inconsistent dropdown appearance across modules",
+                    examples: [],
+                    action: "Create dropdown/select component specification"
+                },
+                {
+                    num: 16,
+                    title: "Undefined Notification/Toast Message System",
+                    modules: "All (especially financial transactions)",
+                    issue: "Success, error, warning notification appearance not specified",
+                    impact: "Users unclear if action succeeded",
+                    examples: [
+                        "\"Saved successfully\" toast styling not documented",
+                        "Error notification color/icon not specified",
+                        "Notification duration/position unclear"
+                    ],
+                    action: "Create notification system design spec"
+                },
+                {
+                    num: 17,
+                    title: "Missing Breadcrumb Navigation",
+                    modules: "All complex modules (Checkout, Shipping, Profile Settings)",
+                    issue: "No breadcrumb trails documented",
+                    impact: "Users lose context in multi-level navigation",
+                    examples: [],
+                    action: "Add breadcrumb navigation pattern (e.g., Dashboard > Checkout > Invoice > Details)"
+                },
+                {
+                    num: 18,
+                    title: "Undefined Date Picker Component",
+                    modules: "Shipping (pickup scheduling), Analytics (date range), MCA (application dates)",
+                    issue: "Calendar UI, date format, range selection not documented",
+                    impact: "Date selection behavior inconsistent",
+                    examples: [],
+                    action: "Document date picker component with all interaction states"
+                },
+                {
+                    num: 19,
+                    title: "Missing Table/List Component Spec",
+                    modules: "Invoice list, Customer list, Leads, Voucher list",
+                    issue: "Column spacing, row height, hover states not specified",
+                    impact: "Inconsistent table appearance",
+                    examples: [],
+                    action: "Create data table component specification"
+                },
+                {
+                    num: 20,
+                    title: "Missing File Upload UI",
+                    modules: "MCA (document upload), Profile (image upload), Order Form (file field)",
+                    issue: "Upload progress, validation, preview not visually documented",
+                    impact: "Unclear upload process and feedback",
+                    examples: [],
+                    action: "Document file upload component with progress and error states"
+                },
+                {
+                    num: 21,
+                    title: "Undefined Radio/Checkbox Component States",
+                    modules: "Order Form, Checkout, Promotions, Shipping",
+                    issue: "Unchecked, checked, indeterminate, disabled states not specified",
+                    impact: "Visual inconsistency with form controls",
+                    examples: [],
+                    action: "Document all radio and checkbox states"
+                },
+                {
+                    num: 22,
+                    title: "Missing Toggle/Switch Component Spec",
+                    modules: "Settings (feature toggles), Saldo, Checkout",
+                    issue: "Toggle on/off appearance, animation not documented",
+                    impact: "Unclear toggle state at a glance",
+                    examples: [],
+                    action: "Create toggle/switch component specification"
+                },
+                {
+                    num: 23,
+                    title: "No Badge/Pill Component Standardization",
+                    modules: "All status displays",
+                    issue: "Badge colors, sizes, styles inconsistent",
+                    impact: "Status indicators look different across modules",
+                    examples: [
+                        "Cashier status badge styling not specified",
+                        "Shipment status badge styling not specified"
+                    ],
+                    action: "Create badge component library"
+                },
+                {
+                    num: 24,
+                    title: "Missing Tooltip/Help Text Styling",
+                    modules: "All complex features",
+                    issue: "Tooltip appearance, trigger mechanism not documented",
+                    impact: "Help icon clicked vs. hovered behavior unclear",
+                    examples: [],
+                    action: "Document tooltip component behavior and styling"
+                },
+                {
+                    num: 25,
+                    title: "Undefined Bulk Action Patterns",
+                    modules: "Invoice, Customer Management, Shipment list",
+                    issue: "Checkbox selection, bulk action toolbar not documented",
+                    impact: "Unclear how to perform bulk operations",
+                    examples: [],
+                    action: "Document bulk action UI pattern"
+                },
+                {
+                    num: 26,
+                    title: "Missing Search/Filter UI Specification",
+                    modules: "All list pages",
+                    issue: "Search input styling, filter panel layout not documented",
+                    impact: "Search component appearance inconsistent",
+                    examples: [],
+                    action: "Document search and filter components"
+                },
+                {
+                    num: 27,
+                    title: "Missing Card/Container Component",
+                    modules: "Dashboard metrics, Leads pipeline, MCA loan cards",
+                    issue: "Card styling, shadow, spacing not specified",
+                    impact: "Inconsistent card appearance",
+                    examples: [],
+                    action: "Document card component specification"
+                },
+                {
+                    num: 28,
+                    title: "Undefined Pagination Component",
+                    modules: "List pages (Invoice, Customer, Leads)",
+                    issue: "Page number display, next/prev button styling not documented",
+                    impact: "Pagination appearance inconsistent",
+                    examples: [],
+                    action: "Document pagination component specification"
+                },
+                {
+                    num: 29,
+                    title: "Shipping: Multi-Step Form Step Navigation Backwards Not Allowed",
+                    modules: "Shipping (Pengiriman - 6 steps)",
+                    issue: "User cannot go back to previous steps to edit",
+                    impact: "Need to restart entire process if mistake made",
+                    examples: [],
+                    action: "Allow backward navigation and step editing"
+                },
+                {
+                    num: 30,
+                    title: "Invoice: Product Line Item Removal Not Visually Shown",
+                    modules: "Checkout (Invoice)",
+                    issue: "How users remove product from invoice not documented",
+                    impact: "Unclear if products can be deleted",
+                    examples: [],
+                    action: "Show product removal UI (delete button, trash icon)"
+                }
+            ],
+            medium: [
+                {
+                    num: 31,
+                    title: "Missing Sidebar Navigation Documentation",
+                    modules: "Dashboard & Settings",
+                    issue: "Sidebar not visually documented, collapse behavior unclear",
+                    impact: "Navigation structure unclear for new users",
+                    action: "Create sidebar navigation specification"
+                },
+                {
+                    num: 32,
+                    title: "No Currency Symbol Standardization",
+                    modules: "Saldo, Invoice, Checkout, Shipping",
+                    issue: "Currency symbol placement, decimal formatting inconsistent",
+                    impact: "Confusing financial displays",
+                    action: "Define currency display format (e.g., \"Rp 1.234.567,00\")"
+                },
+                {
+                    num: 33,
+                    title: "Missing Number Formatting Standards",
+                    modules: "All (thousands separator, decimals)",
+                    issue: "Large numbers not documented for formatting",
+                    impact: "Inconsistent number display",
+                    action: "Define number formatting (1,234 vs 1.234)"
+                },
+                {
+                    num: 34,
+                    title: "Order Form Builder: Field Dragging/Reordering Not Shown",
+                    modules: "Checkout (Order Form)",
+                    issue: "Drag-to-reorder interaction not visually documented",
+                    impact: "Unclear if fields are draggable",
+                    action: "Document drag handle UI and interaction"
+                },
+                {
+                    num: 35,
+                    title: "Red Zone: Address Suggestion Selection Not Documented",
+                    modules: "Shipping (Cek Red Zone)",
+                    issue: "If address not found, how user selects from suggestions unclear",
+                    impact: "Address validation workflow incomplete",
+                    action: "Show address suggestion selection UI"
+                },
+                {
+                    num: 36,
+                    title: "Analytics: Chart Types Not Specified",
+                    modules: "Checkout Reports, Shipping Reports",
+                    issue: "Line charts, bar charts, pie charts not visually specified",
+                    impact: "Chart appearance unclear",
+                    action: "Document chart component types and styling"
+                },
+                {
+                    num: 37,
+                    title: "Missing Timeline Component",
+                    modules: "Tracking (Lacak Pengiriman), MCA Application (step completion)",
+                    issue: "Timeline visualization not documented",
+                    impact: "Unclear how status updates are displayed",
+                    action: "Create timeline component specification"
+                },
+                {
+                    num: 38,
+                    title: "No Comparison/Variant Visualization",
+                    modules: "Checkout Personalization (A/B testing), Shipping (carrier comparison)",
+                    issue: "How variants are compared not visually shown",
+                    impact: "Unclear if side-by-side comparison available",
+                    action: "Document comparison UI pattern"
+                },
+                {
+                    num: 39,
+                    title: "MCA: Repayment Schedule Visualization Missing",
+                    modules: "Financial (Merchant Cash Advance)",
+                    issue: "How repayment schedule is displayed not documented",
+                    impact: "Unclear if calendar, table, or timeline used",
+                    action: "Create repayment schedule visualization"
+                },
+                {
+                    num: 40,
+                    title: "Toko Offline: Transaction Receipt Not Shown",
+                    modules: "Checkout (Toko Offline)",
+                    issue: "POS receipt layout and printing not visually documented",
+                    impact: "Receipt format unclear",
+                    action: "Document receipt template and layout"
+                },
+                {
+                    num: 41,
+                    title: "Checkout Personalization: Live Preview Not Clearly Shown",
+                    modules: "Checkout (Personalization)",
+                    issue: "How live preview updates in real-time not documented",
+                    impact: "Unclear if preview is live or requires refresh",
+                    action: "Document live preview update behavior"
+                },
+                {
+                    num: 42,
+                    title: "Missing Error Recovery & Retry Flows",
+                    modules: "All API-dependent modules",
+                    issue: "What happens when API call fails, how to retry",
+                    impact: "Users stuck on error with no path forward",
+                    action: "Document error recovery UI and retry mechanisms"
+                },
+                {
+                    num: 43,
+                    title: "Leads: Pipeline Kanban Board Not Shown",
+                    modules: "Marketing (Leads)",
+                    issue: "Leads kanban board visualization not documented",
+                    impact: "Lead pipeline workflow unclear",
+                    action: "Document kanban board UI and drag-drop interaction"
+                },
+                {
+                    num: 44,
+                    title: "Customer Segmentation: Condition Builder Not Documented",
+                    modules: "Marketing (Customer)",
+                    issue: "How users create custom segments with conditions not shown",
+                    impact: "Complex segmentation UI missing",
+                    action: "Document condition builder UI pattern"
+                },
+                {
+                    num: 45,
+                    title: "Voucher: Bulk Code Generation Not Shown",
+                    modules: "Promotions (Voucher)",
+                    issue: "Generating multiple voucher codes at once not visually shown",
+                    impact: "Process for bulk code creation unclear",
+                    action: "Document bulk code generation UI"
+                },
+                {
+                    num: 46,
+                    title: "QR Campaign: QR Code Display & Download Not Documented",
+                    modules: "Promotions (QR Campaign)",
+                    issue: "QR code preview and download options not shown",
+                    impact: "How to use QR codes unclear",
+                    action: "Document QR code display and download UI"
+                },
+                {
+                    num: 47,
+                    title: "Missing Print/Export Patterns",
+                    modules: "Invoice (download/print), Reports (CSV/PDF export), Shipping labels (print)",
+                    issue: "Print and export functionality not visually shown",
+                    impact: "Unclear how to export/print documents",
+                    action: "Document print/export UI patterns"
+                },
+                {
+                    num: 48,
+                    title: "Missing Inline Editing Pattern",
+                    modules: "Customer notes, Invoice description, Promotion names",
+                    issue: "Inline edit functionality not visually documented",
+                    impact: "Unclear if fields are editable inline",
+                    action: "Document inline editing UI (pencil icon, edit mode)"
+                },
+                {
+                    num: 49,
+                    title: "Missing Tag/Multi-Select Input",
+                    modules: "Customer (tags), Order Form (product selection)",
+                    issue: "Tag input component styling not specified",
+                    impact: "Multi-select appearance inconsistent",
+                    action: "Create tag/multi-select component specification"
+                },
+                {
+                    num: 50,
+                    title: "Missing Status Flow Visualization",
+                    modules: "Invoice (Draft → Sent → Paid), MCA (Steps), Shipment (In Transit → Delivered)",
+                    issue: "How statuses transition visually not shown",
+                    impact: "Status workflow unclear",
+                    action: "Document status state machines and visual transitions"
+                },
+                {
+                    num: 51,
+                    title: "Shipping: Cost Detail Breakdown Modal Not Fully Shown",
+                    modules: "Shipping (Pengiriman)",
+                    issue: "Cost surcharge breakdown visualization unclear",
+                    impact: "Users don't understand why cost is high",
+                    action: "Create detailed cost breakdown modal design"
+                },
+                {
+                    num: 52,
+                    title: "Settings: API Key Visibility Toggle Not Documented",
+                    modules: "General Settings",
+                    issue: "How API keys are shown/hidden not specified",
+                    impact: "Security UI unclear",
+                    action: "Document API key visibility toggle pattern"
+                },
+                {
+                    num: 53,
+                    title: "Missing \"Share\" / \"Generate Link\" UI",
+                    modules: "Checkout Personalization (public checkout link), Tracking (share tracking link)",
+                    issue: "How to share/copy links not visually documented",
+                    impact: "Share functionality UI unclear",
+                    action: "Document share/link generation UI pattern"
+                },
+                {
+                    num: 54,
+                    title: "Missing Real-Time Update Indicators",
+                    modules: "Saldo (balance updates), Dashboard (metrics updates)",
+                    issue: "How users know data is refreshing not documented",
+                    impact: "Users unclear if data is current",
+                    action: "Document refresh indicator and auto-update behavior"
+                },
+                {
+                    num: 55,
+                    title: "Missing Keyboard Shortcuts Documentation",
+                    modules: "All complex modules",
+                    issue: "No keyboard shortcuts mentioned anywhere",
+                    impact: "Power users can't use keyboard only",
+                    action: "Document keyboard shortcuts (if available) or add them"
+                },
+                {
+                    num: 56,
+                    title: "Authentication: Social Login Not Mentioned",
+                    modules: "Authentication",
+                    issue: "Documentation mentions \"common patterns\" but not implemented",
+                    impact: "Unclear if Google/Facebook login available",
+                    action: "Clarify social login availability and add UI if supported"
+                },
+                {
+                    num: 57,
+                    title: "Dashboard: Metric Calculation Transparency Missing",
+                    modules: "Dashboard",
+                    issue: "How metrics are calculated not explained",
+                    impact: "Merchants don't trust numbers",
+                    action: "Document metric definitions and calculation methods"
+                },
+                {
+                    num: 58,
+                    title: "Invoice: Tax Calculation Transparency Missing",
+                    modules: "Checkout (Invoice)",
+                    issue: "How tax is calculated not visually explained",
+                    impact: "Users don't understand tax amounts",
+                    action: "Show tax calculation breakdown"
+                },
+                {
+                    num: 59,
+                    title: "Missing Help/Contextual Guidance",
+                    modules: "All complex features",
+                    issue: "Help icon mentioned but no guidance text shown",
+                    impact: "Users lost on how to use features",
+                    action: "Document inline help text and contextual guidance"
+                },
+                {
+                    num: 60,
+                    title: "Missing Success Rate/Conversion Metrics",
+                    modules: "Analytics, Promotions (all have reports but some metrics unclear)",
+                    issue: "How conversion rates, success rates displayed not specified",
+                    impact: "Report interpretation unclear",
+                    action: "Document metric display format and visual indicators"
+                }
+            ],
+            low: [
+                {
+                    num: 61,
+                    title: "Missing Animation Specifications (Duration, Easing)",
+                    modules: "All interactive components",
+                    issue: "Animation timings not documented (should be 200-300ms)",
+                    impact: "Animations may feel too slow or jerky",
+                    action: "Document animation specifications"
+                },
+                {
+                    num: 62,
+                    title: "Missing Theming System (Dark Mode, Custom Colors)",
+                    modules: "All",
+                    issue: "No mention of theme customization for merchants",
+                    impact: "Limited white-label capability",
+                    action: "Consider theming system if needed"
+                },
+                {
+                    num: 63,
+                    title: "Missing Localization Documentation",
+                    modules: "All",
+                    issue: "How language switching works not documented",
+                    impact: "Multi-language support unclear",
+                    action: "Document localization approach"
+                },
+                {
+                    num: 64,
+                    title: "Missing Contextual Help Triggers",
+                    modules: "All complex modules",
+                    issue: "When/how help should appear not documented",
+                    impact: "Help might not surface at right time",
+                    action: "Define help trigger patterns"
+                },
+                {
+                    num: 65,
+                    title: "Missing Notification Center/History",
+                    modules: "Dashboard",
+                    issue: "Notification badge mentioned but notification center not shown",
+                    impact: "Users can't access notification history",
+                    action: "Consider notification center design"
+                },
+                {
+                    num: 66,
+                    title: "Missing Undo/Redo Functionality",
+                    modules: "Form builders, Checkout Personalization",
+                    issue: "No undo/redo mentioned",
+                    impact: "Mistakes can't be easily reversed",
+                    action: "Consider undo/redo for form creation"
+                },
+                {
+                    num: 67,
+                    title: "Missing Activity Log/Audit Trail",
+                    modules: "All settings/admin functions",
+                    issue: "Who made what changes not documented",
+                    impact: "No accountability trail",
+                    action: "Document activity log design"
+                },
+                {
+                    num: 68,
+                    title: "Missing Dark Mode Support",
+                    modules: "All",
+                    issue: "No dark mode mentioned",
+                    impact: "Evening usage may be stressful on eyes",
+                    action: "Consider dark mode implementation"
+                },
+                {
+                    num: 69,
+                    title: "Missing Offline Mode Capability",
+                    modules: "Toko Offline especially",
+                    issue: "What works offline not documented",
+                    impact: "Unclear what's available without internet",
+                    action: "Document offline functionality"
+                },
+                {
+                    num: 70,
+                    title: "Missing Performance Indicators",
+                    modules: "All long lists",
+                    issue: "No loading time or response time targets mentioned",
+                    impact: "Unclear if product is performing well",
+                    action: "Document performance standards"
+                },
+                {
+                    num: 71,
+                    title: "Missing Batch Operation Progress",
+                    modules: "Bulk uploads, Bulk actions",
+                    issue: "How progress is shown for batch operations unclear",
+                    impact: "Users don't know if operation is still running",
+                    action: "Document batch operation progress UI"
+                },
+                {
+                    num: 72,
+                    title: "Missing Scheduled/Recurring Actions",
+                    modules: "Promotions, Analytics",
+                    issue: "If campaigns/reports can be scheduled not clear",
+                    impact: "Unclear what scheduling is possible",
+                    action: "Document scheduling UI if available"
+                },
+                {
+                    num: 73,
+                    title: "Missing Form Autosave Indication",
+                    modules: "Invoice creation, Order Form builder, Settings",
+                    issue: "Whether forms autosave or require manual save unclear",
+                    impact: "Users unsure if changes are saved",
+                    action: "Document autosave behavior and indication"
+                }
+            ]
+        };
+
+        // Render issues
+        function renderIssues() {
+            Object.entries(issues).forEach(([priority, items]) => {
+                const grid = document.getElementById(`${priority}-grid`);
+                grid.innerHTML = items.map((issue, idx) => `
+                    <div class="issue-card" onclick="toggleCard(this)">
+                        <div class="issue-header">
+                            <button class="expand-btn"></button>
+                            <div style="flex: 1;">
+                                <div class="issue-number">#${issue.num}</div>
+                                <div class="issue-title">${issue.title}</div>
+                                <div class="issue-impact">${issue.modules}</div>
+                            </div>
+                        </div>
+                        <div class="issue-description">${issue.issue}</div>
+                        <div class="issue-details">
+                            <h4>💥 Impact</h4>
+                            <p>${issue.impact}</p>
+                            ${issue.examples && issue.examples.length > 0 ? `
+                                <h4>📋 Examples</h4>
+                                <ul>
+                                    ${issue.examples.map(ex => `<li>${ex}</li>`).join('')}
+                                </ul>
+                            ` : ''}
+                            <div class="issue-action">
+                                <strong>✅ Recommended Action:</strong><br>${issue.action}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            });
+        }
+
+        // Toggle card details
+        function toggleCard(card) {
+            card.classList.toggle('expanded');
+        }
+
+        // Toggle all cards in section
+        function toggleAllCards(sectionId) {
+            const section = document.getElementById(sectionId);
+            const cards = section.querySelectorAll('.issue-card');
+            const allExpanded = Array.from(cards).every(c => c.classList.contains('expanded'));
+            
+            cards.forEach(card => {
+                if (allExpanded) {
+                    card.classList.remove('expanded');
+                } else {
+                    card.classList.add('expanded');
+                }
+            });
+        }
+
+        // Tab navigation
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const priority = btn.dataset.priority;
+                
+                // Update active button
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update active section
+                document.querySelectorAll('.priority-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                if (priority === 'summary') {
+                    document.getElementById('summary-section').classList.add('active');
+                } else {
+                    document.getElementById(`${priority}-section`).classList.add('active');
+                }
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // Initialize
+        renderIssues();
+    </script>
+</body>
+</html>
