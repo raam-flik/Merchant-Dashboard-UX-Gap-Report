@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "public": true,
+  "buildCommand": "",
+  "outputDirectory": ".",
+  "framework": "static",
+  "github": {
+    "enabled": true
+  },
+  "env": [],
+  "regions": ["sfo1"]
+}
