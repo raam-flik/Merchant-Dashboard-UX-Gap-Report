@@ -1,0 +1,18 @@
+.git
+node_modules
+.gitignore
+*.md
+.DS_Store
+Checkout
+Merchant\ Dashboard
+Shopper\ App
+Cashier\ App
+flik-pdfs
+tests
+*.json
+*.ts
+*.js
+FLIK-*
+package*
+playwright*
+*.txt
