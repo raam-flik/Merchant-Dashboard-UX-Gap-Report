@@ -1,0 +1,360 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                     FLIK PRODUCTS: UX ISSUES PRIORITY MATRIX                    ║
+║                          Real Usability Problems Only                           ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ CRITICAL PRIORITY (FIX WEEKS 1-3)                                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🔴 CRITICAL #1: Button Label Inconsistency
+   ├─ Status: ACTIVE (in production now)
+   ├─ Impact: HIGH (affects all users, every time they switch products)
+   ├─ Effort: LOW (just rename labels)
+   ├─ Timeline: 2-3 days
+   ├─ User Experience Impact: Cognitive confusion, feels fragmented
+   ├─ Example:
+   │  ├─ Dashboard: "Lanjutkan" (continue)
+   │  ├─ Checkout: "Lanjut" (continue - different label!)
+   │  └─ User: "Are these different actions?"
+   └─ Recommendation: Pick ONE and use everywhere → "Lanjut" recommended
+
+🔴 CRITICAL #2: Authentication Method Inconsistency
+   ├─ Status: ACTIVE (in production now)
+   ├─ Impact: CRITICAL (different auth per product creates mental model break)
+   ├─ Effort: HIGH (requires refactoring auth systems)
+   ├─ Timeline: 3-4 weeks
+   ├─ User Experience Impact: Security anxiety, credential management burden
+   ├─ Products Affected:
+   │  ├─ Dashboard: Email + Password (traditional)
+   │  ├─ Checkout: WhatsApp OTP (mobile-first)
+   │  ├─ Shopper App: WhatsApp OTP (mobile-first)
+   │  └─ O2O: Cashier Credentials (unique)
+   ├─ User Scenario:
+   │  ├─ Merchant logs into Dashboard with email/password
+   │  ├─ Wants to test Checkout
+   │  ├─ Only WhatsApp OTP available
+   │  └─ Frustration: "Why is authentication different?"
+   ├─ Decision Required: Migrate all to OTP or support both?
+   └─ Recommendation: Strategic decision first, then implementation
+
+🔴 CRITICAL #3: Navigation Pattern Inconsistency
+   ├─ Status: ACTIVE (in production now)
+   ├─ Impact: HIGH (affects power users, merchants testing across products)
+   ├─ Effort: HIGH (requires redesign of navigation)
+   ├─ Timeline: 4-6 weeks
+   ├─ User Experience Impact: Learning curve steep, context switching painful
+   ├─ Navigation Models:
+   │  ├─ Dashboard: Sidebar (persistent, always visible)
+   │  ├─ Checkout: Modal steps (linear, no persistent nav)
+   │  ├─ Shopper App: Bottom tabs (tab-based, mobile standard)
+   │  ├─ O2O: Flat dashboard (buttons, non-persistent)
+   │  └─ Landing Page: Top menu (dropdown)
+   ├─ User Scenario:
+   │  ├─ Merchant comfortable with Dashboard sidebar
+   │  ├─ Switches to Checkout → modal-based flow
+   │  ├─ Switches to Shopper App → bottom tabs
+   │  ├─ Switches to O2O → flat buttons
+   │  └─ Exhaustion: "Each product feels different"
+   ├─ Mental Model Problem:
+   │  ├─ Dashboard: "Jump between any section instantly"
+   │  ├─ Checkout: "Follow steps linearly"
+   │  ├─ App: "Use tabs to switch sections"
+   │  └─ These conflict → cognitive overload
+   └─ Recommendation: Define 2-3 allowed patterns, standardize per platform
+
+🔴 CRITICAL #4: Payment Success Confirmation Unclear
+   ├─ Status: ACTIVE (in production now)
+   ├─ Impact: CRITICAL (payment is most critical flow)
+   ├─ Effort: MEDIUM (design + implementation)
+   ├─ Timeline: 2-3 weeks
+   ├─ User Experience Impact: ANXIETY (is payment successful?), cart abandonment
+   ├─ Problem Areas:
+   │  ├─ No clear success screen
+   │  ├─ No loading feedback during processing
+   │  ├─ Unclear when merchant dashboard updates
+   │  ├─ Confirmation redundancy (app + email + dashboard)
+   │  └─ Real-time vs delayed update confusion
+   ├─ User Scenarios:
+   │  ├─ Customer: "Did payment succeed?" (uncertain)
+   │  ├─ Merchant: "When will transaction show up?" (no indication)
+   │  ├─ Both: "Do I need to confirm multiple places?" (confused)
+   │  └─ Result: User retries payment (duplicates) or abandons
+   ├─ Missing Elements:
+   │  ├─ Success indicator (checkmark, message, etc.)
+   │  ├─ Transaction ID display
+   │  ├─ Receipt option
+   │  ├─ Loading indicator during processing
+   │  └─ Email confirmation
+   └─ Recommendation: Create unified success pattern with all elements
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ HIGH PRIORITY (FIX WEEKS 2-4)                                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🔴 HIGH #1: Form Validation Error Messages Inconsistent
+   ├─ Status: ACTIVE
+   ├─ Impact: HIGH (users can't complete forms)
+   ├─ Effort: MEDIUM
+   ├─ Timeline: 2 weeks
+   ├─ Problem: Errors too vague or unclear
+   │  ├─ "Invalid email" → missing format hint
+   │  ├─ "Address not supported" → no guidance on how to fix
+   │  ├─ Red highlighting unclear → field error? form error?
+   │  └─ Unclear if one error or multiple
+   ├─ User Impact: Form abandonment, support tickets
+   └─ Recommendation: Create error message template with clear guidance
+
+🔴 HIGH #2: Mobile Responsiveness Issues
+   ├─ Status: ACTIVE
+   ├─ Impact: HIGH (majority of traffic is mobile)
+   ├─ Effort: MEDIUM
+   ├─ Timeline: 2-3 weeks
+   ├─ Problems:
+   │  ├─ Touch targets <48px (hard to tap)
+   │  ├─ Tables overflow horizontally (bad UX)
+   │  ├─ Modals don't resize properly
+   │  ├─ Keyboard covers input fields
+   │  └─ Layout breaks at certain sizes
+   ├─ Device Testing: Unknown (not tested on actual devices)
+   └─ Recommendation: Test on actual devices, fix responsive issues
+
+🔴 HIGH #3: Shopper App Modal/Deep Linking Problems
+   ├─ Status: ACTIVE
+   ├─ Impact: HIGH (affects app engagement)
+   ├─ Effort: HIGH
+   ├─ Timeline: 3-4 weeks
+   ├─ Issues:
+   │  ├─ Modal stacking unclear (how many levels? what does back do?)
+   │  ├─ Webview integration (Checkout opens in webview - why?)
+   │  ├─ Auto-login (confusing "auto-login" experience)
+   │  ├─ Two-stage confirmation (webview + app)
+   │  └─ Deep linking missing (notifications don't link to content)
+   ├─ User Scenario:
+   │  ├─ Click notification → app opens to homepage (not specific order)
+   │  ├─ Must manually navigate to order
+   │  └─ User: "Did the notification work?"
+   └─ Recommendation: Implement deep linking, redesign checkout integration
+
+🔴 HIGH #4: O2O Payment Processing Feedback Missing
+   ├─ Status: ACTIVE
+   ├─ Impact: CRITICAL (payment is core function of POS)
+   ├─ Effort: HIGH
+   ├─ Timeline: 3-4 weeks
+   ├─ Missing Feedback:
+   │  ├─ No loading indicator during payment processing
+   │  ├─ No success/failure indication to cashier
+   │  ├─ QRIS QR code display unclear
+   │  ├─ EDC terminal integration unclear
+   │  └─ Receipt flow unclear
+   ├─ User Impact:
+   │  ├─ Cashier: "Is payment done?" (uncertain)
+   │  ├─ Customer: "Is it processing?" (no feedback)
+   │  └─ Both: "Did payment succeed?" (no indication)
+   ├─ Critical Scenarios:
+   │  ├─ Network drops during payment → what happens?
+   │  ├─ Payment takes 10+ seconds → is it working?
+   │  └─ EDC terminal status → is device connected?
+   └─ Recommendation: Design unified payment feedback for QRIS + EDC
+
+🔴 HIGH #5: Session/Logout Inconsistency
+   ├─ Status: ACTIVE
+   ├─ Impact: SECURITY (shared devices)
+   ├─ Effort: MEDIUM
+   ├─ Timeline: 2-3 weeks
+   ├─ Issues:
+   │  ├─ Logout button location varies
+   │  ├─ Auto-logout timeout not documented
+   │  ├─ Session sharing between products unclear
+   │  └─ Shared device scenario: next user sees previous user's data
+   ├─ Security Risk:
+   │  ├─ Merchant doesn't logout, cashier uses same terminal
+   │  ├─ Cashier sees merchant's data
+   │  └─ Privacy breach
+   ├─ User Scenario:
+   │  ├─ Merchant closes browser without logging out
+   │  ├─ Family member opens browser
+   │  ├─ Sees merchant's dashboard
+   │  └─ Privacy issue
+   └─ Recommendation: Explicit logout, session timeout warning, clear UI
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ MEDIUM PRIORITY (FIX WEEKS 4-5)                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+🟡 MEDIUM #1: Empty State Messaging Inconsistent
+   ├─ Status: ACTIVE
+   ├─ Impact: MEDIUM (affects new user onboarding)
+   ├─ Effort: LOW
+   ├─ Timeline: 1 week
+   ├─ Problem:
+   │  ├─ New merchant sees empty invoice list
+   │  ├─ No message explaining "No invoices yet"
+   │  ├─ No CTA "Create your first invoice"
+   │  ├─ User thinks: "Is this broken?"
+   │  └─ No guidance on next steps
+   └─ Recommendation: Add helpful empty state messages + CTAs
+
+🟡 MEDIUM #2: Notification Inconsistency
+   ├─ Status: ACTIVE
+   ├─ Impact: MEDIUM (affects feedback clarity)
+   ├─ Effort: MEDIUM
+   ├─ Timeline: 1-2 weeks
+   ├─ Inconsistencies:
+   │  ├─ Toast duration varies (or unclear)
+   │  ├─ Position varies (top? bottom? center?)
+   │  ├─ Error vs success styling unclear
+   │  ├─ Error may auto-dismiss (bad - should require action)
+   │  └─ No icon consistency
+   └─ Recommendation: Create notification design system
+
+🟡 MEDIUM #3: Terminology Inconsistency
+   ├─ Status: ACTIVE
+   ├─ Impact: MEDIUM (confusing for cross-product users)
+   ├─ Effort: LOW
+   ├─ Timeline: 1 week
+   ├─ Examples:
+   │  ├─ Create: "Buat" vs "Tambah" (different verbs, same action)
+   │  ├─ Cancel: "Batal" vs "Tidak" (different words)
+   │  ├─ Settings: "Pengaturan" vs "Settings" (Indonesian vs English)
+   │  ├─ Payment: "Bayar" vs "Bayar Sekarang" (inconsistent)
+   │  └─ User: "Is 'Buat' different from 'Tambah'?" (no, just inconsistent)
+   └─ Recommendation: Create terminology glossary, standardize terms
+
+
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                            EFFORT & TIMELINE SUMMARY                           ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+Priority      Count  Hours   Timeline    Complexity
+─────────────────────────────────────────────────────
+CRITICAL        4    100-120  Weeks 1-3   MEDIUM-HIGH
+HIGH            5    80-100   Weeks 2-4   HIGH
+MEDIUM          3    40-50    Weeks 4-5   LOW-MEDIUM
+─────────────────────────────────────────────────────
+TOTAL          12    220-270  5 weeks     CROSS-FUNCTIONAL
+
+Teams Needed: Product, Design, Frontend, QA
+
+
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                         QUICK WIN OPPORTUNITIES                                ║
+║                    (Can Start Immediately, <2 Weeks)                           ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+✅ CRITICAL #1: Button Labels (2-3 days)
+   → Easy, high-impact
+   → Standardize on "Lanjut" everywhere
+   → Start: TODAY
+
+✅ MEDIUM #3: Terminology Guide (1 week)
+   → Low effort, improves UX
+   → Create glossary, apply universally
+   → Start: THIS WEEK
+
+✅ MEDIUM #1: Empty States (3-5 days)
+   → Design-only, no engineering
+   → Add messages + CTAs to empty lists
+   → Start: THIS WEEK
+
+✅ MEDIUM #2: Notification Guide (1 week)
+   → Design + implementation
+   → Standardize styling, duration, position
+   → Start: NEXT WEEK
+
+
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                       RECOMMENDED IMPLEMENTATION ORDER                         ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+WEEK 1: Quick Wins
+  ├─ 📋 Standardize button labels ("Lanjut" everywhere)
+  ├─ 📋 Create terminology glossary
+  ├─ 🎨 Design empty state patterns
+  └─ 🎨 Create notification style guide
+  Status: LOW EFFORT, HIGH IMPACT
+
+WEEK 2: Core Issues (Parallel Work)
+  ├─ 🔧 Form validation error messages
+  ├─ 📱 Mobile responsiveness improvements
+  ├─ 📋 Session/logout standardization
+  └─ 💳 Payment confirmation design
+  Status: MEDIUM EFFORT, HIGH IMPACT
+
+WEEK 3-4: Complex Issues
+  ├─ 🔐 Authentication method decision + planning
+  ├─ 🧭 Navigation pattern unification (planning)
+  ├─ 📲 Shopper App modal/deep linking redesign
+  └─ 🏪 O2O payment feedback system
+  Status: HIGH EFFORT, CRITICAL IMPACT
+
+WEEK 5: Integration + Testing
+  ├─ 🔧 Implement all fixes
+  ├─ 🧪 User testing
+  ├─ 🔄 Cross-product QA
+  └─ 📊 Measure improvements
+  Status: TESTING, VALIDATION
+
+
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                         ROOT CAUSE CATEGORIES                                  ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+1️⃣  PRODUCT FRAGMENTATION (4 issues)
+    ├─ Button labels differ
+    ├─ Navigation patterns differ
+    ├─ Authentication methods differ
+    ├─ Terminology differs
+    └─ Root: Products built independently, no cross-product alignment
+
+2️⃣  DESIGN ERA MISMATCH (3 issues)
+    ├─ Dashboard: Traditional web (email/password, sidebar)
+    ├─ Newer products: Mobile-first (OTP, different nav)
+    └─ Root: Built at different times without retroactive alignment
+
+3️⃣  PAYMENT ARCHITECTURE (2 issues)
+    ├─ Checkout success confirmation unclear
+    ├─ O2O payment feedback missing
+    └─ Root: Complex payment integrations (QRIS, EDC, e-wallet)
+
+4️⃣  MOBILE EXPERIENCE (2 issues)
+    ├─ Responsive design not tested
+    ├─ Touch targets not verified
+    └─ Root: Desktop-first design approach
+
+5️⃣  GOVERNANCE GAPS (1 issue)
+    ├─ Session/logout inconsistent
+    └─ Root: No security/UX standards enforced
+
+
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                         SUCCESS METRICS                                        ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+WEEK 1:
+  ✅ Button label standardization: 100%
+  ✅ Terminology guide: Published
+  ✅ Empty state examples: Designed
+
+MONTH 1:
+  ✅ Form validation: Consistent across products
+  ✅ Mobile issues: 80%+ resolved
+  ✅ Payment UX: Unified
+  ✅ Session/logout: Standardized
+  ✅ Notifications: Consistent style
+
+QUARTER 1:
+  ✅ Navigation patterns: Unified
+  ✅ Auth method: Decision made + planned
+  ✅ All CRITICAL issues: Resolved
+  ✅ All HIGH issues: 80%+ resolved
+  ✅ Design system: Established
+
+
+════════════════════════════════════════════════════════════════════════════════════
+Report Generated: April 24, 2026
+Analysis: Real UX/UI Usability Issues (NOT documentation gaps)
+Status: Ready for Product Team Discussion
+════════════════════════════════════════════════════════════════════════════════════
