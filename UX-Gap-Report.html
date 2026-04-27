@@ -555,7 +555,7 @@
 
             <div class="stats">
                 <div class="stat-card critical">
-                    <div class="number">10</div>
+                    <div class="number">6</div>
                     <div class="label">🔴 Critical</div>
                 </div>
                 <div class="stat-card high">
@@ -575,12 +575,12 @@
 
         <div class="summary-box">
             <h3>📊 Executive Summary</h3>
-            <p>This comprehensive UX gap report identifies <strong>73 critical issues</strong> across all 10 modules of the FLIK Merchant Dashboard. Key findings reveal consistency issues with visual states, missing interaction documentation, accessibility gaps, and responsive design concerns.</p>
+            <p>This comprehensive UX gap report identifies <strong>69 UX gaps</strong> across all 10 modules of the FLIK Merchant Dashboard. Key findings reveal consistency issues with visual states, missing interaction documentation, accessibility gaps, and responsive design concerns.</p>
             <p><strong>Recommendation:</strong> Start with the 10 Critical Priority items to establish your design system foundation, then progressively address High and Medium priority items.</p>
         </div>
 
         <div class="nav-tabs">
-            <button class="tab-btn active" data-priority="critical">🔴 Critical (10)</button>
+            <button class="tab-btn active" data-priority="critical">🔴 Critical (6)</button>
             <button class="tab-btn" data-priority="high">🟠 High (19)</button>
             <button class="tab-btn" data-priority="medium">🟡 Medium (44)</button>
             <button class="tab-btn" data-priority="low">🔵 Low (10)</button>
@@ -823,48 +823,6 @@
         const issues = {
             critical: [
                 {
-                    num: 1,
-                    title: "Missing Visual State Documentation Across All Modules",
-                    modules: "All (10/10 modules)",
-                    issue: "No documentation for critical states (loading, empty, error, success)",
-                    impact: "Inconsistent UI implementation across products",
-                    examples: [
-                        "No loading spinners/skeletons defined for async operations",
-                        "Empty states not documented for new users",
-                        "Error messages styling undefined",
-                        "Success confirmations not visually specified"
-                    ],
-                    action: "Create state design system covering: Idle, Loading, Success, Error, Empty, Disabled"
-                },
-                {
-                    num: 2,
-                    title: "Missing Form Validation & Error Handling UI",
-                    modules: "Authentication, Profile, Settings, Checkout, Shipping, Promotions",
-                    issue: "Form validation feedback not visually documented",
-                    impact: "Users unclear if fields are valid, required, or have errors",
-                    examples: [
-                        "Required field indicators not specified",
-                        "Inline error message styling missing",
-                        "Success validation checkmarks not documented",
-                        "Real-time validation visual feedback missing"
-                    ],
-                    action: "Document validation states and inline feedback UI"
-                },
-                {
-                    num: 3,
-                    title: "Undefined Multi-Step Form Progression",
-                    modules: "Checkout (Invoice), Shipping (6-step creation), MCA (9-step)",
-                    issue: "Step indicators, progress bars, navigation not visually documented",
-                    impact: "Users unclear on progress, can't navigate backwards, step 1/3 styling undefined",
-                    examples: [
-                        "Pengiriman 6-step form: step completion colors not specified",
-                        "MCA 9-step: progress visualization missing",
-                        "Back navigation not mentioned",
-                        "Step skipping capability unclear"
-                    ],
-                    action: "Create comprehensive multi-step form design system"
-                },
-                {
                     num: 4,
                     title: "Missing Modal/Dialog Standardization",
                     modules: "Saldo, Checkout, Shipping, All pop-ups",
@@ -877,20 +835,6 @@
                         "Modal titles and padding not standardized"
                     ],
                     action: "Create modal component design specification"
-                },
-                {
-                    num: 5,
-                    title: "Responsive Design Gap - No Mobile/Tablet Layouts",
-                    modules: "All (10/10 modules)",
-                    issue: "Zero documentation for mobile/tablet versions",
-                    impact: "Responsive implementation guesswork, inconsistent mobile UX",
-                    examples: [
-                        "Multi-column tables: no horizontal scroll specified",
-                        "Hamburger menu never documented",
-                        "Dropdown behavior on mobile unclear",
-                        "Touch targets sizing not addressed"
-                    ],
-                    action: "Create responsive breakpoint specifications (Mobile: <768px, Tablet: 768-1024px, Desktop: >1024px)"
                 },
                 {
                     num: 6,
